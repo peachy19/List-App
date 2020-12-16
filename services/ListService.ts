@@ -18,7 +18,7 @@ export class ListService {
       client.release();
       return rows;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -32,7 +32,7 @@ export class ListService {
       ]);
       client.release();
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -42,7 +42,7 @@ export class ListService {
       await client.query('DELETE from items WHERE list_id = $1', [id]);
       client.release();
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 }

@@ -12,7 +12,7 @@ export class ItemsService {
       client.release();
       return rows;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -25,7 +25,7 @@ export class ItemsService {
       ]);
       client.release();
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 
@@ -35,7 +35,7 @@ export class ItemsService {
       await client.query('DELETE from items WHERE id = $1', [id]);
       client.release();
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 }
