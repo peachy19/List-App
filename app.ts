@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import pool from './dbConnector';
-import ItemsRouter from './routes/itemsRouter';
+import itemsRouter from './routes/itemsRouter';
+import listRouter from './routes/listRouter';
 
 class App {
   public app: express.Application;
@@ -10,7 +11,6 @@ class App {
     this.config();
     this.dbSetup();
     this.routerSetup();
-    // this.app.use('/items', ItemsRouter);
   }
   private config(): void {
     this.app.use(bodyParser.json());
@@ -25,7 +25,8 @@ class App {
   }
 
   private routerSetup() {
-    this.app.use('/items', ItemsRouter);
+    this.app.use('/', listRouter);
+    this.app.use('/items', itemsRouter);
   }
 }
 export default new App().app;
