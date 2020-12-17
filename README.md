@@ -4,6 +4,23 @@ A simple items list app. It allows a user to reset the list, create and delete i
 
 ## Getting started
 
+After cloning the repository
+
+### Run server
+
 ```
-npm start
+> npm install
+
+> npm start
 ```
+
+### Run client
+
+In a new terminal window
+
+```
+> cd client
+> npm install
+> npm start
+```
+

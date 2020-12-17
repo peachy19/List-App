@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:3000';
+export const apiUrl = 'http://localhost:3000';
 
 const getData = (id: string) => {
   return axios({ method: 'get', url: `${apiUrl}/${id}` });
@@ -29,4 +29,23 @@ const deleteItem = async (id: number) => {
   });
 };
 
-export { addItem, deleteItem, getData };
+const resetList = async (id: string) => {
+  await axios({
+    method: 'delete',
+    url: `${apiUrl}/${id}`
+  }).catch(e => {
+    throw new Error(e);
+  });
+};
+
+const createList = async () => {
+  const res = await axios({
+    method: 'post',
+    url: `${apiUrl}`
+  }).catch(e => {
+    throw new Error(e);
+  });
+  return res.data;
+};
+
+export { addItem, deleteItem, getData, resetList, createList };

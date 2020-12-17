@@ -2,7 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import ListItems from './components/ListItems';
 import { ListState, ListItem } from './models';
-import { getData, addItem, deleteItem } from './services/api';
+import { getData, addItem, deleteItem, resetList, createList } from './services/api';
 
 class List extends React.Component<{}, ListState> {
   constructor(props: any) {
@@ -20,12 +20,18 @@ class List extends React.Component<{}, ListState> {
   }
 
   componentDidMount() {
-
     getData(this.getListId()).then(res => {
       this.setState({
         items: res.data
       });
-    });
+    }).catch(async err => {
+      if(err.response.status === 400) {
+        const id = await createList();
+        console.log(window.location);
+        window.location.href = `${window.location.origin}/${id}`
+        alert('New list has been created!')
+      }
+    })
   }
 
   componentDidUpdate(prevProps: any, prevState: any) {
@@ -47,6 +53,14 @@ class List extends React.Component<{}, ListState> {
     });
   }
 
+  onReset = async () => {
+    const listId = this.getListId();
+    await resetList(listId)
+    this.setState({
+      items: []
+    });
+  }
+
   onDeleteClicked = async (id: number) => {
     const list = this.state.items.filter((item) => item.id !== id);
     this.setState({ items: list})
@@ -59,7 +73,7 @@ class List extends React.Component<{}, ListState> {
         <div className="container">
           <div className="row">
             <div className="col-12 mt-4">
-              <Form onAddItem={this.onAddItem}/>
+              <Form onAddItem={this.onAddItem} onResetClicked={this.onReset}/>
               <ListItems items={this.state.items} onDeleteClicked={this.onDeleteClicked}/>
             </div>
           </div>

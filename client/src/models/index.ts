@@ -23,6 +23,7 @@ export interface FormState {
 
 export interface FormProps {
   onAddItem: (name: string, e: any) => void;
+  onResetClicked: () => void;
 }
 
 export interface ListItemsProps {

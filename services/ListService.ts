@@ -1,6 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate } from 'uuid';
 import pool from '../dbConnector';
 import Item from '../models/item';
+import { listMissing } from '../errorCodes';
 
 export interface List {
   id: string;
@@ -10,6 +11,7 @@ export interface List {
 export class ListService {
   public static async getListById(id: string): Promise<Array<Item>> {
     try {
+      if (!validate(id)) throw new Error(listMissing);
       const client = await pool.connect();
       const { rows } = await client.query(
         'SELECT * from items WHERE list_id = $1',
@@ -22,15 +24,13 @@ export class ListService {
     }
   }
 
-  public static async create(name: string) {
+  public static async create() {
     try {
       const id = uuidv4();
       const client = await pool.connect();
-      await client.query('INSERT into list(id, name) values ($1, $2)', [
-        id,
-        name
-      ]);
+      await client.query('INSERT into list(id) values ($1)', [id]);
       client.release();
+      return id;
     } catch (err) {
       throw err;
     }

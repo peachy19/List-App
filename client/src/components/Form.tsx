@@ -9,29 +9,34 @@ class Form extends Component<FormProps, FormState> {
     };
   }
 
-  handleSubmit(e:any){
+  onAddClicked(e:any){
     this.props.onAddItem(this.state.name, e);
     this.setState({ name: '' });
   };
 
-  handleInput(e: any){
+  onResetClicked() {
+    this.props.onResetClicked();
+  }
+
+  onValueChange(e: any){
     this.setState({ name: e.target.value });
   };
 
   render() {
     return (
-      <form className="input-group" onSubmit={(e) => this.handleSubmit(e)}>
-        <input
-          className="form-control mr-4 "
-          type="text"
-          placeholder="Add Item"
-          value={this.state.name}
-          onChange={(e) => this.handleInput(e)}
-        ></input>
-        <button className="btn btn-primary" type="submit">
-          Add
-        </button>
-      </form>
+      <div className="container">
+        <div className="row">
+          <div className="col-6">
+            <input type="text" value={this.state.name} className="form-control" placeholder='Add item' onChange={(e) => this.onValueChange(e)}/>
+          </div>
+          <div className="col">
+            <div className="btn btn-primary form-control" onClick={(e) => this.onAddClicked(e)}>Add</div>
+          </div>
+          <div className="col">
+            <div className="btn btn-primary form-control" onClick={() => this.onResetClicked()}>Reset</div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
