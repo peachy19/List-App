@@ -12,14 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ItemsService = void 0;
+exports.ListService = void 0;
+const uuid_1 = require("uuid");
 const dbConnector_1 = __importDefault(require("../dbConnector"));
-class ItemsService {
-    static get(listId) {
+const errorCodes_1 = require("../errorCodes");
+class ListService {
+    static getListById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!uuid_1.validate(id))
+                    throw new Error(errorCodes_1.listMissing);
                 const client = yield dbConnector_1.default.connect();
-                const { rows } = yield client.query('SELECT * from items WHERE list_id = $1', [listId]);
+                const { rows } = yield client.query('SELECT * from items WHERE list_id = $1', [id]);
                 client.release();
                 return rows;
             }
@@ -28,26 +32,25 @@ class ItemsService {
             }
         });
     }
-    static create(name, listId) {
+    static create() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const id = uuid_1.v4();
                 const client = yield dbConnector_1.default.connect();
-                yield client.query('INSERT into items(name, list_id) values ($1, $2)', [
-                    name,
-                    listId
-                ]);
+                yield client.query('INSERT into list(id) values ($1)', [id]);
                 client.release();
+                return id;
             }
             catch (err) {
                 throw err;
             }
         });
     }
-    static delete(id) {
+    static reset(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield dbConnector_1.default.connect();
-                yield client.query('DELETE from items WHERE id = $1', [id]);
+                yield client.query('DELETE from items WHERE list_id = $1', [id]);
                 client.release();
             }
             catch (err) {
@@ -56,4 +59,4 @@ class ItemsService {
         });
     }
 }
-exports.ItemsService = ItemsService;
+exports.ListService = ListService;
