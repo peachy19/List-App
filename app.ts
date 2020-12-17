@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import pool from './dbConnector';
 import itemsRouter from './routes/itemsRouter';
 import listRouter from './routes/listRouter';
+const cors = require('cors');
 
 class App {
   public app: express.Application;
@@ -13,6 +14,7 @@ class App {
     this.routerSetup();
   }
   private config(): void {
+    this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }

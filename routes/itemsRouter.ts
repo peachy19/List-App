@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import cors from 'cors';
 import { Router } from 'express';
 import { ItemsService } from '../services/ItemsService';
 
