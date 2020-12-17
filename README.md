@@ -9,7 +9,6 @@ After cloning the repository
 ### Run server
 
 ```
-> npm install
 
 > npm start
 ```
